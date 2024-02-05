@@ -2,6 +2,10 @@ package view;
 
 import javax.swing.JDialog;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -11,13 +15,24 @@ import java.awt.Rectangle;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import model.DAO;
+
 import java.awt.Cursor;
 import javax.swing.ImageIcon;
 
 public class Login extends JDialog {
 	private JTextField inputLogin;
 	private JPasswordField inputSenha;
+	private JLabel imgDatabase;
+	
 	public Login() {
+		addWindowListener(new WindowAdapter() {
+			public void windowActivated(WindowEvent e) {
+				statusConexãoBanco();
+			}
+		});
+		
 		setTitle("Login");
 		setBounds(new Rectangle(500, 250, 460, 311));
 		setResizable(false);
@@ -56,10 +71,47 @@ public class Login extends JDialog {
 		tituloLogin.setBounds(149, 11, 122, 14);
 		getContentPane().add(tituloLogin);
 		
-		JLabel imgDatabase = new JLabel("");
+		imgDatabase = new JLabel("");
 		imgDatabase.setIcon(new ImageIcon(Login.class.getResource("/img/databaseOff.png")));
-		imgDatabase.setBounds(10, 195, 52, 66);
+		imgDatabase.setBounds(10, 202, 53, 59);
 		getContentPane().add(imgDatabase);
+	}
+	
+	DAO dao = new DAO();
+	
+	
+	private void statusConexãoBanco() {
+		try {
+			Connection conexaoBanco = dao.conectar();
+			
+			if(conexaoBanco == null) {
+				//Esccolher a imagem para quando não há conexão
+				imgDatabase.setIcon(new ImageIcon(Login.class.getResource("/img/databaseOff.png")));
+			}
+			
+			else {
+				//Troca a imagem se houver conexão
+				imgDatabase.setIcon(new ImageIcon(Login.class.getResource("/img/databaseOn.png")));
+			}
+			conexaoBanco.close();
+		}
+		
+		catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	private void logar() {
+		String read = "select * from funcionario where login=? and senha=md5(?)";
+		
+		try {
+			
+			
+		}
+		
+		catch(Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	public static void main(String[] args) {
