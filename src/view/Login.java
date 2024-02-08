@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
@@ -115,6 +116,29 @@ public class Login extends JDialog {
 	private void logar() {
 		String read = "select * from funcionario where login=? and senha=md5(?)";
 		
+		//Validação Login do usuário
+		if (inputLogin.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Login do usuário obrigatório!");
+			inputLogin.requestFocus();
+		}
+		
+		
+		//Validação Senha do usuário
+		else if (inputSenha.getPassword().length == 0) {
+			JOptionPane.showMessageDialog(null, "Senha do usuário obrigatório!");
+			inputSenha.requestFocus();
+			
+		}
+		
+		else if (inputSenha.getPassword().length == 0 && inputLogin.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "KKKKKK!");
+			inputLogin.requestFocus();
+		}
+		
+		else {
+		
+		
+		
 		try {
 			// Estabelecer a conexão
 			Connection conexaoBanco = dao.conectar();
@@ -137,17 +161,35 @@ public class Login extends JDialog {
 
 			if (resultadoExecucao.next()) {
 				
-				System.out.println("Você logou!");
+				Home home = new Home ();
+				home.setVisible(true);
 				
+				//Fechar a janela de Login assim que a janela home abrir (Automatocamente)
+				dispose();
+						
 			}
-		
-
+			else {
+				//Criar uma alerta (Pou_up) que informa ao usuário  que login e/ou senha estão invaálidos
+				JOptionPane.showMessageDialog(null, "Login e/ou senha inválido(s)!");
+				inputLogin.setText(null);
+				inputSenha.setText(null);
+				inputLogin.requestFocus();
+			
+			}
+			
+			
+			
+			
+		conexaoBanco.close();	
 			
 		}
+		
 		
 		catch(Exception e) {
 			System.out.println(e);
 		}
+	}
+		
 	}
 
 	public static void main(String[] args) {
