@@ -4,18 +4,25 @@ import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.awt.Rectangle;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import model.DAO;
+
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
+import javax.swing.JComboBox;
+
 
 public class Funcionarios extends JDialog {
 	private JTextField inputNome;
 	private JTextField inputEmail;
 	private JTextField inputSenha;
 	private JTextField inputLogin;
-	private JTextField inputPerfil;
+	
 	public Funcionarios() {
 		setBounds(550, 250, 477, 340);
 		setTitle("Funcionarios");
@@ -63,16 +70,6 @@ public class Funcionarios extends JDialog {
 		getContentPane().add(inputLogin);
 		inputLogin.setColumns(10);
 		
-		inputPerfil = new JTextField();
-		inputPerfil.setBounds(292, 193, 137, 20);
-		getContentPane().add(inputPerfil);
-		inputPerfil.setColumns(10);
-		
-		JLabel imgCreate = new JLabel("");
-		imgCreate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		imgCreate.setIcon(new ImageIcon(Funcionarios.class.getResource("/img/create.png")));
-		imgCreate.setBounds(97, 234, 64, 56);
-		getContentPane().add(imgCreate);
 		
 		JLabel imgUpdate = new JLabel("");
 		imgUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -85,6 +82,44 @@ public class Funcionarios extends JDialog {
 		imgDelete.setIcon(new ImageIcon(Funcionarios.class.getResource("/img/delete.png")));
 		imgDelete.setBounds(365, 234, 64, 56);
 		getContentPane().add(imgDelete);
+		
+		inputPerfil = new JComboBox();
+		inputPerfil.setBounds(292, 192, 137, 22);
+		getContentPane().add(inputPerfil);
+		
+		JLabel imgCreate = new JLabel("");
+		imgCreate.setIcon(new ImageIcon(Funcionarios.class.getResource("/img/create.png")));
+		imgCreate.setBounds(72, 234, 64, 56);
+		getContentPane().add(imgCreate);
+	}
+	
+DAO dao = new DAO();
+private JComboBox inputPerfil;
+
+
+	
+	private void adicionarFuncionario() {
+		String create = "insert into funcionario (nomeFunc, login, senha, perfil, email) values( ? , ? , md5(?), ?, ? );";
+		
+		try {
+			//Estabelecer a conexão
+			Connection conexaoBanco = dao.conectar();
+			
+			//Preparar a execusão do script SQL
+			PreparedStatement executarSQl = conexaoBanco.prepareStatement(create);
+			
+			//Subtituir os ponto de interrogação pelo conteúdo das caixas de texto (inputs)
+			executarSQl.setString(1, nomeFunc.getText());
+			executarSQl.setString(2,LoginFunc.getText());
+			executarSQl.setString(3,senhaFunc.getText());
+			//Trocar o componente do perfil
+			executarSQl.setString(5,emailFunc.getText());
+			
+		}
+		
+		catch (Exception e) {
+			
+		}
 	}
 			
 		public static void main(String[] args) {

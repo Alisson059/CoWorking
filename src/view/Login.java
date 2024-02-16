@@ -91,7 +91,6 @@ public class Login extends JDialog {
 		
 		
 		//Acessar o botão "Entrar" com tecla "Enter"
-		
 		getRootPane().setDefaultButton(btnLogin);
 		
 		
@@ -191,7 +190,12 @@ public class Login extends JDialog {
 
 			if (resultadoExecucao.next()) {
 				
-				Home home = new Home ();
+				Home home = new Home();
+				
+				home.txtUsuarioLogado.setText("Usuario: " + resultadoExecucao.getString(2));
+				home.txtPerfilLogado.setText("Perfil: " + resultadoExecucao.getString(5));
+				
+				
 				home.setVisible(true);
 				
 				//Fechar a janela de Login assim que a janela home abrir (Automatocamente)
