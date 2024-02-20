@@ -7,7 +7,7 @@ public class DAO {
 	//Por que os atributos foram definidos como privado?
 	
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://10.23.46.21:3306/dbCoworking";
+	private String url = "jdbc:mysql://10.23.46.20:3306/dbCoworking";
 	private String user = "ti";
 	private String password = "senac";
 	
