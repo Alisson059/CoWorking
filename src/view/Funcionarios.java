@@ -125,6 +125,12 @@ public class Funcionarios extends JDialog {
 		btnUpdate.setBounds(377, 286, 83, 59);
 		getContentPane().add(btnUpdate);
 		
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				update();
+			}
+		});
+		
 		btnDelete = new JButton("");
 		btnDelete.setContentAreaFilled(false);
 		btnDelete.setBorder(null);
@@ -156,9 +162,19 @@ public class Funcionarios extends JDialog {
 		btnPesquisa.setBounds(494, 52, 35, 33);
 		getContentPane().add(btnPesquisa);
 		
+		idFunc = new JLabel("ID:");
+		idFunc.setBounds(24, 152, 46, 14);
+		getContentPane().add(idFunc);
+		
+		inputID = new JTextField();
+		inputID.setEnabled(false);
+		inputID.setBounds(47, 149, 86, 20);
+		getContentPane().add(inputID);
+		inputID.setColumns(10);
+		
 		btnPesquisa.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				setarPesquisa();
+				btnBuscarFuncionario();
 				}
 		});
 	
@@ -172,6 +188,8 @@ public class Funcionarios extends JDialog {
 	public JButton btnDelete;
 	private JTable tblFuncionarios;
 	private JButton btnPesquisa;
+	private JLabel idFunc;
+	private JTextField inputID;
 	
 	private void adicionarFuncionario () {
 		String create = "insert into funcionario (nomeFunc, login, senha, Perfil, email) values (?, ?, md5(?), ?, ?)";
@@ -218,7 +236,7 @@ public class Funcionarios extends JDialog {
 			PreparedStatement executarSQL = conexaoBanco.prepareStatement(readTabela);
 			
 			//Substiruit o ? pelo conteúdo da caixa de texto
-			executarSQL.setString(1, inputNome.getText() + "%");
+			executarSQL.setString(1, inputID.getText() + "%");
 			
 			//Executar o comando Sql
 			ResultSet resultadoExecucao = executarSQL.executeQuery();
@@ -243,13 +261,14 @@ public class Funcionarios extends JDialog {
 		int setarLinha = tblFuncionarios.getSelectedRow();
 		
 		inputNome.setText(tblFuncionarios.getModel().getValueAt(setarLinha, 1).toString());
+		inputID.setText(tblFuncionarios.getModel().getValueAt(setarLinha, 0).toString());
 	
 		
 	}
 	
 	private void btnBuscarFuncionario() {
 		
-		String readBtn = "selecy * from funcionario whare nomeFunc = ?;";
+		String readBtn = "select * from funcionario where idFuncionario = ?;";
 		
 		try {
 			
@@ -257,10 +276,12 @@ public class Funcionarios extends JDialog {
 			Connection conexaoBanco = dao.conectar();
 			
 			
-			PreparedStatement executarSQL = conexaoBanco.prepareStatement(readTabela);
+			PreparedStatement executarSQL = conexaoBanco.prepareStatement(readBtn);
 			
 			
-			executarSQL.setString(1, inputNome.getText());
+			
+			executarSQL.setString(1, inputID.getText());
+			
 			
 			
 			ResultSet resultadoExecucao = executarSQL.executeQuery();
@@ -271,6 +292,7 @@ public class Funcionarios extends JDialog {
 				inputLogin.setText(resultadoExecucao.getString(3));
 				inputSenha.setText(resultadoExecucao.getString(4));
 				inputPerfil.setSelectedItem(resultadoExecucao.getString(5));
+				inputEmail.setText(resultadoExecucao.getString(6));
 			}
 			
 			
@@ -281,6 +303,50 @@ public class Funcionarios extends JDialog {
 		catch (Exception e) {
 
 		}
+	}
+	
+	
+	private void update() {
+		
+		String update = "UPDATE funcionario set nomeFunc = ?, login = ?, senha = ?, perfil = ?, email = ?  where idFuncionario = ?;";
+		
+		try {
+			
+		
+		//estabelecer a conexão
+		Connection conexaoBanco = dao.conectar();
+		
+		
+		PreparedStatement executarSQL = conexaoBanco.prepareStatement(update);
+		
+		
+		executarSQL.setString(1, inputNome.getText());
+		executarSQL.setString(2, inputLogin.getText());
+		executarSQL.setString(3, inputSenha.getText());
+		executarSQL.setString(4, inputPerfil.getSelectedItem().toString());
+		executarSQL.setString(5, inputEmail.getText());
+		executarSQL.setString(6, inputID.getText());
+		
+		executarSQL.executeUpdate();
+		
+		JOptionPane.showMessageDialog(null, "Usuario atualizado com sucesso");
+		
+		
+		conexaoBanco.close();
+		
+		
+	} 
+		
+		catch (SQLIntegrityConstraintViolationException error) {
+			JOptionPane.showMessageDialog(null, "Login em uso. \nEscolha outro nome de usuário");
+			limparCampos();
+		}
+		
+		catch (Exception e) {
+
+		}
+		
+		
 	}
 	
 	
@@ -295,6 +361,7 @@ public class Funcionarios extends JDialog {
 		inputEmail.setText(null);
 		inputNome.requestFocus();
 }	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
