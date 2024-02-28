@@ -1,434 +1,415 @@
 package view;
- 
+
 import javax.swing.JDialog;
- 
+
 import java.awt.EventQueue;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
- 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.SingleSelectionModel;
- 
-import model.DAO;
-import net.proteanit.sql.DbUtils;
- 
-import javax.swing.JPasswordField;
-import javax.swing.ImageIcon;
-import java.awt.Cursor;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.file.attribute.AclEntry;
-import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import model.DAO;
+import net.proteanit.sql.DbUtils;
+
+import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+import java.awt.Cursor;
+import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
- 
+import java.awt.Color;
+import javax.swing.JRadioButton;
+
 public class Salas extends JDialog {
 	private JTextField inputOcup;
-	public JButton btnCreate;
-	public JButton btnUpdate;
-	public JButton btnDelete;
-	private JTable tblSalas;
-	private JButton btnPesquisar;
-	public JTextField inputID;
-	private JComboBox inputCategoria;
-	private JComboBox inputCod;
-	private JTextField inputNum;
-	private JComboBox inputAndar;
- 
+
+	public JButton imgCreate;
+	public JButton imgUpdate;
+	public JButton imgDelete;
+
 	public Salas() {
 		setTitle("Salas");
 		setResizable(false);
-		setBounds(100, 100, 624, 437);
-		// setBounds(550,250,564,395);
+		setBounds(new Rectangle(300, 100, 724, 446));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/img/logo.png")));
 		getContentPane().setLayout(null);
- 
+
 		JLabel tipoSala = new JLabel("Categoria:");
-		tipoSala.setBounds(10, 58, 60, 14);
+		tipoSala.setBounds(24, 29, 74, 14);
 		getContentPane().add(tipoSala);
- 
-		JLabel codSala = new JLabel("Codigo:");
-		codSala.setBounds(24, 244, 46, 14);
+
+		JLabel codSala = new JLabel("Código:");
+		codSala.setBounds(24, 268, 74, 14);
 		getContentPane().add(codSala);
- 
+
 		JLabel andarSala = new JLabel("Andar:");
-		andarSala.setBounds(312, 244, 46, 14);
+		andarSala.setBounds(392, 203, 57, 14);
 		getContentPane().add(andarSala);
- 
-		JLabel ocupSala = new JLabel("Ocupação Maxima:");
-		ocupSala.setBounds(260, 276, 98, 14);
+
+		JLabel ocupSala = new JLabel("Ocupação:");
+		ocupSala.setBounds(376, 268, 73, 14);
 		getContentPane().add(ocupSala);
- 
-		JLabel numSala = new JLabel("Numero:");
-		numSala.setBounds(20, 276, 60, 14);
+
+		JLabel numSala = new JLabel("Número:");
+		numSala.setBounds(24, 203, 74, 14);
 		getContentPane().add(numSala);
- 
+
 		inputOcup = new JTextField();
 		inputOcup.setColumns(10);
-		inputOcup.setBounds(368, 273, 148, 20);
+		inputOcup.setBounds(451, 265, 160, 20);
 		getContentPane().add(inputOcup);
- 
-		btnCreate = new JButton("");
-		btnCreate.setContentAreaFilled(false);
-		btnCreate.setBorder(null);
-		btnCreate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnCreate.setIcon(new ImageIcon(Salas.class.getResource("/img/create.png")));
-		btnCreate.setBounds(312, 328, 92, 59);
-		
-		getContentPane().add(btnCreate);
-		btnCreate.addActionListener(new ActionListener() {
+
+		imgCreate = new JButton("");
+		imgCreate.setBackground(new Color(240, 240, 240));
+		imgCreate.setBorderPainted(false);
+		imgCreate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		imgCreate.setIcon(new ImageIcon(Salas.class.getResource("/img/create.png")));
+		imgCreate.setBounds(392, 342, 65, 54);
+		getContentPane().add(imgCreate);
+
+		imgCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				adicionarSalas();
- 
+				adicionarSala();
 			}
 		});
-		
- 
-		btnUpdate = new JButton("");
-		btnUpdate.setContentAreaFilled(false);
-		btnUpdate.setBorder(null);
-		btnUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnUpdate.setIcon(new ImageIcon(Salas.class.getResource("/img/update.png")));
-		btnUpdate.setBounds(414, 328, 83, 59);
-		getContentPane().add(btnUpdate);
- 
-		btnUpdate.addActionListener(new ActionListener() {
+
+		imgUpdate = new JButton("");
+		imgUpdate.setBackground(new Color(240, 240, 240));
+		imgUpdate.setBorderPainted(false);
+		imgUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		imgUpdate.setIcon(new ImageIcon(Salas.class.getResource("/img/update.png")));
+		imgUpdate.setBounds(488, 342, 65, 54);
+		getContentPane().add(imgUpdate);
+
+		imgUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateSalas();
+				atualizarSala();
 			}
 		});
- 
-		btnDelete = new JButton("");
-		btnDelete.setContentAreaFilled(false);
-		btnDelete.setBorder(null);
-		btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnDelete.setIcon(new ImageIcon(Salas.class.getResource("/img/delete.png")));
-		btnDelete.setBounds(507, 328, 83, 59);
-		getContentPane().add(btnDelete);
- 
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+		imgDelete = new JButton("");
+		imgDelete.setBackground(new Color(240, 240, 240));
+		imgDelete.setBorderPainted(false);
+		imgDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		imgDelete.setIcon(new ImageIcon(Salas.class.getResource("/img/delete.png")));
+		imgDelete.setBounds(581, 342, 65, 54);
+		getContentPane().add(imgDelete);
+		
+		imgDelete.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
 				deletarSalas();
 			}
 		});
- 
+
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(74, 76, 494, 87);
+		scrollPane.setBounds(95, 54, 516, 90);
 		getContentPane().add(scrollPane);
- 
+
 		tblSalas = new JTable();
 		scrollPane.setViewportView(tblSalas);
- 
+
+		JButton btnPesquisar = new JButton("");
+		btnPesquisar.setBackground(new Color(240, 240, 240));
+		btnPesquisar.setBorderPainted(false);
+		btnPesquisar.setIcon(new ImageIcon(Salas.class.getResource("/img/search.png")));
+		btnPesquisar.setBounds(265, 193, 43, 33);
+		getContentPane().add(btnPesquisar);
+
+		inputID = new JTextField();
+		inputID.setEnabled(false);
+		inputID.setBounds(24, 160, 40, 20);
+		getContentPane().add(inputID);
+		inputID.setColumns(10);
+
+		// Deixar o campo ID invisível
+		inputID.setVisible(false);
+
+		inputCategoria = new JComboBox();
+		inputCategoria.setToolTipText("");
+		inputCategoria.setModel(new DefaultComboBoxModel(new String[] { "", "Sala de reunião", "Sala de conferência",
+				"Espaço de eventos", "Escritório privado" }));
+		inputCategoria.setBounds(95, 25, 516, 22);
+		getContentPane().add(inputCategoria);
+
+		
+		inputCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscarSalaNaTabela();
+			}
+		});
+
+		inputCod = new JComboBox();
+		inputCod.setModel(new DefaultComboBoxModel(new String[] { "", "REU", "CONF", "EVENT", "PRIV" }));
+		inputCod.setBounds(95, 265, 160, 22);
+		getContentPane().add(inputCod);
+
+		inputAndar = new JComboBox();
+		inputAndar.setModel(
+				new DefaultComboBoxModel(new String[] { "", "Subsolo", "Térreo", "1º andar", "2º andar", "3º andar" }));
+		inputAndar.setBounds(451, 200, 160, 22);
+		getContentPane().add(inputAndar);
+
+		inputNum = new JTextField();
+		inputNum.setBounds(95, 200, 160, 20);
+		getContentPane().add(inputNum);
+		inputNum.setColumns(10);
+
+		btnPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnBuscarSala();
+			}
+		});
+
 		tblSalas.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				setarCaixasTexto();
 			}
 		});
- 
-		btnPesquisar = new JButton("");
-		btnPesquisar.setContentAreaFilled(false);
-		btnPesquisar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnPesquisar.setIcon(new ImageIcon(Salas.class.getResource("/img/search.png")));
-		btnPesquisar.setBorder(null);
-		btnPesquisar.setBounds(188, 270, 34, 20);
-		getContentPane().add(btnPesquisar);
-		
-		btnPesquisar.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				btnBuscarSalas();
-			}
-		});
- 
-		inputID = new JTextField();
-		inputID.setEnabled(false);
-		inputID.setBounds(46, 199, 60, 20);
-		getContentPane().add(inputID);
-		inputID.setColumns(10);
- 
-		JLabel idFunc = new JLabel("ID :");
-		idFunc.setBounds(24, 202, 29, 14);
-		getContentPane().add(idFunc);
- 
-		inputCategoria = new JComboBox();
-		inputCategoria.setModel(new DefaultComboBoxModel(new String[] { "", "Sala de Reunião", "Sala de Conferência",
-				"Espaço de Eventos", "Escritório Privado" }));
-		inputCategoria.setBounds(74, 54, 139, 22);
-		getContentPane().add(inputCategoria);
-		
-		inputCategoria.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				buscarSalaNaTabela();
-				
-			}
-		});
- 
-		inputCod = new JComboBox();
-		inputCod.setModel(new DefaultComboBoxModel(new String[] { "", "REU", "CONF", "EVENT", "PRIV" }));
-		inputCod.setBounds(74, 240, 106, 22);
-		getContentPane().add(inputCod);
- 
-		inputAndar = new JComboBox();
-		inputAndar.setModel(
-				new DefaultComboBoxModel(new String[] { "", "Subsolo", "Térreo", "1ª andar", "2ª andar", "3ª andar" }));
-		inputAndar.setBounds(368, 240, 148, 22);
-		getContentPane().add(inputAndar);
- 
-		inputNum = new JTextField();
-		inputNum.setBounds(74, 273, 104, 20);
-		getContentPane().add(inputNum);
-		inputNum.setColumns(10);
- 
-	}
-	
+
+	} // Fim do construtor
+
+	// Criar um objeto da classe DAO para estabelecer conexão com banco
 	DAO dao = new DAO();
- 
-	private void adicionarSalas() {
- 
-		String create = "insert into salas (andarSala, numeroSala, tipoSala, codigoSala, ocupacaoSala) values (?, ?, ?, ?, ?)";
- 
+	private JTable tblSalas;
+	private JTextField inputID;
+	private JComboBox inputCategoria;
+	private JComboBox inputCod;
+	private JComboBox inputAndar;
+	private JTextField inputNum;
+
+	private void adicionarSala() {
+		String create = "insert into salas (andarSala, numeroSala, tipoSala, codigoSala, ocupacaoSala)"
+				+ " values (?, ?, ?, ?, ?);";
+
+		// Validação da categoria (tipo) da sala
 		if (inputCategoria.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Categoria da sala Obrigatória!");
- 
+			JOptionPane.showMessageDialog(null, "Categoria da sala obrigatória!");
+			inputCategoria.requestFocus();
 		}
- 
+
+		// Validação do código da sala
 		else if (inputCod.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Código da sala Obrigatória!");
- 
+			JOptionPane.showMessageDialog(null, "Código da sala obrigatório!");
+			inputCod.requestFocus();
 		}
-		
+
+		// Validação do andar da sala
 		else if (inputAndar.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Andar da sala Obrigatória!");
- 
+			JOptionPane.showMessageDialog(null, "Andar da sala obrigatório!");
+			inputAndar.requestFocus();
 		}
- 
+
+		// Validação do número da sala
 		else if (inputNum.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Numero da sala Obrigatória!");
+			JOptionPane.showMessageDialog(null, "Número da sala obrigatório!");
 			inputNum.requestFocus();
-			
 		}
- 
+
+		// Validação da ocupação máxima da sala
 		else if (inputOcup.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Ocupação máxima Obrigatória!");
+			JOptionPane.showMessageDialog(null, "Ocupação máxima obrigatória!");
 			inputOcup.requestFocus();
-			
 		}
- 
+
 		else {
- 
+
 			try {
-				// Estabelecer a conexao
+				// Estabelecer a conexão
 				Connection conexaoBanco = dao.conectar();
- 
+
+				// Preparar a execusão do script SQL
 				PreparedStatement executarSQL = conexaoBanco.prepareStatement(create);
- 
-				// Substituir os pontos de interrogação pelo conteudo das caixas de texto
+
+				// Substituir os pontos de interrogação pelo conteúdo das caixas de texto
 				// (inputs)
-				
 				executarSQL.setString(1, inputAndar.getSelectedItem().toString());
 				executarSQL.setString(2, inputNum.getText());
 				executarSQL.setString(3, inputCategoria.getSelectedItem().toString());
 				executarSQL.setString(4, inputCod.getSelectedItem().toString());
 				executarSQL.setString(5, inputOcup.getText());
- 
-				// Executar os comandos SQL e inserir o Salas no banco de dados
+
+				// Executar os comandos SQL e inserir a sala no banco de dados
 				executarSQL.executeUpdate();
- 
-				JOptionPane.showMessageDialog(null, "Sala cadastrada com sucesso.");
- 
+
+				JOptionPane.showMessageDialog(null, "Sala cadastrada com sucesso!");
 				limparCampos();
+
 				conexaoBanco.close();
 			}
- 
+
 			catch (SQLIntegrityConstraintViolationException error) {
-				JOptionPane.showMessageDialog(null, "Sala já cadastrada.");
-				limparCampos();
- 
+				JOptionPane.showMessageDialog(null, "Sala já cadastrada");
 			}
- 
+
 			catch (Exception e) {
 				System.out.println(e);
- 
 			}
- 
 		}
- 
 	}
-	
-private void buscarSalaNaTabela() {
-		
-		String readTabela = "select tipoSala as Categoria, andarSala as Sala, numeroSala as Número from salas where tipoSala = ?; ";
-		
-		try {
-			
-			//estabelecer a conexão
-			Connection conexaoBanco = dao.conectar();
-			
-			//preparar a execução dos comandos SQL
-			PreparedStatement executarSQL = conexaoBanco.prepareStatement(readTabela);
-			
-			//Substiruit o ? pelo conteúdo da caixa de texto
-			executarSQL.setString(1, inputCategoria.getSelectedItem().toString());
-			
-			//Executar o comando Sql
-			ResultSet resultadoExecucao = executarSQL.executeQuery();
-			
-			//Exibir o resultado na tabela, utilização da biblioteca rs2xml para "popular"
-			//a tabela
-			tblSalas.setModel(DbUtils.resultSetToTableModel(resultadoExecucao));
-			
-			conexaoBanco.close();
-			
-		} 
-		
-		
-		catch (Exception e) {
 
+	private void buscarSalaNaTabela() {
+		String readTabela = "select tipoSala as Categoria, andarSala as Andar, numeroSala as Número from salas where tipoSala = ?;";
+
+		try {
+			// Estabelecer a conexão
+			Connection conexaoBanco = dao.conectar();
+
+			// Preparar a execução dos comandos SQL
+			PreparedStatement executarSQL = conexaoBanco.prepareStatement(readTabela);
+
+			// Substituir o ? pelo conteúdo da caixa de texto
+			executarSQL.setString(1, inputCategoria.getSelectedItem().toString());
+
+			// Executar o comando SQL
+			ResultSet resultadoExecucao = executarSQL.executeQuery();
+
+			// Exibir o resultado na tabela, utilização da biblioteca rs2xml para "popular"
+			// a tabela
+			tblSalas.setModel(DbUtils.resultSetToTableModel(resultadoExecucao));
+
+			conexaoBanco.close();
+		}
+
+		catch (Exception e) {
+			System.out.println(e);
 		}
 	}
- 
+
 	private void setarCaixasTexto() {
-		
-		// Criar uma variavel para receber a linha da tabela
+
+		// Criar uma variável para receber a linha da tabela
 		int setarLinha = tblSalas.getSelectedRow();
- 
+
 		inputNum.setText(tblSalas.getModel().getValueAt(setarLinha, 2).toString());
- 
+		inputAndar.setSelectedItem(tblSalas.getModel().getValueAt(setarLinha, 1).toString());
+
 	}
- 
-	
-	
-	private void btnBuscarSalas() {
- 
-		String readBtn = "select * from salas where numeroSala = ?;";
- 
+
+	// Criar método para buscar sala pelo botão Pesquisar
+	private void btnBuscarSala() {
+		String readBtn = "select * from salas where numeroSala = ? and andarSala = ?;";
+
 		try {
- 
+			// Estabelecer a conexão
 			Connection conexaoBanco = dao.conectar();
- 
+
+			// Preparar a execução do comando SQL
 			PreparedStatement executarSQL = conexaoBanco.prepareStatement(readBtn);
- 
+
+			// Substituir o ponto de interrogação pelo conteúdo da caixa de texto (número da
+			// sala)
 			executarSQL.setString(1, inputNum.getText());
- 
-			// Executar o comando SQL e exibir o resultado no fomulario Salas (todos
+			executarSQL.setString(2, inputAndar.getSelectedItem().toString());
+
+			// Executar o comando SQL e exibir o resultado no formulário salas (todos
 			// os seus dados)
 			ResultSet resultadoExecucao = executarSQL.executeQuery();
- 
+
 			if (resultadoExecucao.next()) {
-				
-				// preencher os campos do formulario
+				// Preencher os campos do formulário
+				inputID.setText(resultadoExecucao.getString(1));
 				inputAndar.setSelectedItem(resultadoExecucao.getString(2));
 				inputCod.setSelectedItem(resultadoExecucao.getString(5));
 				inputOcup.setText(resultadoExecucao.getString(6));
- 
 			}
- 
+
+			conexaoBanco.close();
 		}
- 
+
 		catch (Exception e) {
 			System.out.println(e);
- 
 		}
- 
 	}
- 
-	private void limparCampos() {
- 
-		inputCategoria.setSelectedIndex(-1);
-		inputCod.setSelectedIndex(-1);
-		inputAndar.setSelectedIndex(-1);
-		inputNum.setText(null);
-		inputOcup.setText(null);
-		
-		inputCategoria.requestFocus();
- 
-	}
- 
-	private void updateSalas() {
-		String updateBtn = "update salas set andarSala = ?, numeroSala = ?, tipoSala = ?, codigoSala = ?, ocupacaoSala = ? where tipoSala = ?;";
- 
+
+	private void atualizarSala() {
+		String update = "update salas set andarSala = ?, numeroSala = ?, tipoSala = ?, codigoSala = ?,"
+				+ " ocupacaoSala = ? where idSala = ?;";
+
+		// Validação da categoria (tipo) da sala
 		if (inputCategoria.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Categoria da sala Obrigatória!");
- 
+			JOptionPane.showMessageDialog(null, "Categoria da sala obrigatória!");
+			inputCategoria.requestFocus();
 		}
- 
+
+		// Validação do código da sala
 		else if (inputCod.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Código da sala Obrigatória!");
- 
+			JOptionPane.showMessageDialog(null, "Código da sala obrigatório!");
+			inputCod.requestFocus();
 		}
-		
+
+		// Validação do andar da sala
 		else if (inputAndar.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Andar da sala Obrigatória!");
- 
+			JOptionPane.showMessageDialog(null, "Andar da sala obrigatório!");
+			inputAndar.requestFocus();
 		}
- 
+
+		// Validação do número da sala
 		else if (inputNum.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Numero da sala Obrigatória!");
+			JOptionPane.showMessageDialog(null, "Número da sala obrigatório!");
 			inputNum.requestFocus();
-			
 		}
- 
+
+		// Validação da ocupação máxima da sala
 		else if (inputOcup.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Ocupação máxima Obrigatória!");
+			JOptionPane.showMessageDialog(null, "Ocupação máxima obrigatória!");
 			inputOcup.requestFocus();
-			
 		}
- 
+
 		else {
- 
- 
 			try {
- 
+				// Estabelecer a conexão
 				Connection conexaoBanco = dao.conectar();
- 
-				PreparedStatement executarSQL = conexaoBanco.prepareStatement(updateBtn);
- 
+
+				// Preparar a execusão do script SQL
+				PreparedStatement executarSQL = conexaoBanco.prepareStatement(update);
+
+				// Substituir os pontos de interrogação pelo conteúdo das caixas de texto
+				// (inputs)
 				executarSQL.setString(1, inputAndar.getSelectedItem().toString());
 				executarSQL.setString(2, inputNum.getText());
 				executarSQL.setString(3, inputCategoria.getSelectedItem().toString());
 				executarSQL.setString(4, inputCod.getSelectedItem().toString());
 				executarSQL.setString(5, inputOcup.getText());
 				executarSQL.setString(6, inputID.getText());
- 
+
+				// Executar os comandos SQL e atualizar a sala no banco de dados
 				executarSQL.executeUpdate();
- 
-				JOptionPane.showMessageDialog(null, "Sala aualizada com sucesso");
- 
+
+				JOptionPane.showMessageDialog(null, "Dados da sala atualizados com sucesso!");
 				limparCampos();
- 
+
 				conexaoBanco.close();
- 
 			}
- 
+
 			catch (SQLIntegrityConstraintViolationException error) {
-				JOptionPane.showMessageDialog(null, "Sala já cadastrada.");
-				limparCampos();
- 
+				JOptionPane.showMessageDialog(null, "Ocorreu um erro. \nEsta sala já encontra-se cadastrada.");
 			}
- 
+
 			catch (Exception e) {
 				System.out.println(e);
- 
 			}
- 
 		}
- 
 	}
- 
+
 	private void deletarSalas() {
-		String delete = "delete from Salas where idSala = ?;";
+		String delete = "delete from salas where idSala = ?;";
  
 		try {
 			Connection conexaoBanco = dao.conectar();
@@ -451,7 +432,16 @@ private void buscarSalaNaTabela() {
  
 		}
 	}
- 
+	
+	private void limparCampos() {
+		inputCategoria.setSelectedItem(null);
+		inputCod.setSelectedItem(null);
+		inputAndar.setSelectedItem(null);
+		inputNum.setText(null);
+		inputOcup.setText(null);
+		inputCategoria.requestFocus();
+	}
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
