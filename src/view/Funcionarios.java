@@ -162,6 +162,13 @@ public class Funcionarios extends JDialog {
 		btnPesquisa.setBounds(494, 52, 35, 33);
 		getContentPane().add(btnPesquisa);
 		
+		btnPesquisa.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				btnBuscarFuncionario();
+				
+				}
+		});
+		
 		idFunc = new JLabel("ID:");
 		idFunc.setBounds(24, 152, 46, 14);
 		getContentPane().add(idFunc);
@@ -171,12 +178,6 @@ public class Funcionarios extends JDialog {
 		inputID.setBounds(47, 149, 86, 20);
 		getContentPane().add(inputID);
 		inputID.setColumns(10);
-		
-		btnPesquisa.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				btnBuscarFuncionario();
-				}
-		});
 	
 		
  
